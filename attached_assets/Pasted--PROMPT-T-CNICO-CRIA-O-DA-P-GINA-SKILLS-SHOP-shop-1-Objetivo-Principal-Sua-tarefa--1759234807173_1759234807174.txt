@@ -1,0 +1,67 @@
+# PROMPT TÉCNICO: CRIAÇÃO DA PÁGINA SKILLS SHOP (/shop)
+
+## 1. Objetivo Principal
+
+Sua tarefa é criar a página principal do "Skills Shop" no caminho `/shop`. Esta página funcionará como uma vitrine ("storefront") para os infoprodutos premium, com um design inspirado na plataforma Steam. A interação chave é que, ao clicar em um produto, os detalhes completos aparecerão em um **modal**, em vez de navegar para uma nova página. A página deve reutilizar os componentes e estilos existentes para manter a consistência visual.
+
+## 2. Estrutura de Arquivos e Roteamento
+
+1.  **Crie a Rota:** Dentro da estrutura do Next.js App Router em `apps/web/app/(main)/`, crie uma nova pasta chamada `shop`.
+2.  **Crie o Arquivo da Página:** Dentro da pasta `shop`, crie o arquivo principal da página: `page.tsx`.
+
+## 3. Estrutura da Página (`page.tsx`)
+
+O componente `page.tsx` será um **Client Component**, pois precisará gerenciar o estado do modal (qual produto está selecionado e se o modal está aberto). Adicione `"use client";` no topo do arquivo. A estrutura vertical será:
+
+1.  **Layout Global:** A página DEVE ser envolvida pelo layout principal, que já inclui o `Header` e o `Footer` existentes.
+
+2.  **Seção de Cabeçalho da Página:**
+    * Abaixo do Header global, adicione uma seção com `padding` vertical (`py-12` ou `py-16`).
+    * Inclua um título principal (`<h1>`) com o texto "Skills Shop" e um subtítulo cativante, como "As ferramentas e o conhecimento que você precisa para escalar. Sem ruído, apenas resultados."
+
+3.  **Grade de Produtos:**
+    * A área principal da página.
+    * Crie uma grade responsiva usando TailwindCSS (ex: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8`).
+    * Nesta grade, você irá renderizar os cards de produtos.
+
+## 4. Criação dos Componentes Reutilizáveis
+
+Para esta página, precisaremos de dois novos componentes principais.
+
+### 4.1. Componente `ProductCard`
+
+1.  **Crie o Arquivo:** Crie um novo arquivo em `apps/web/components/shop/ProductCard.tsx`.
+2.  **Estrutura do Componente:**
+    * O componente será construído utilizando o `<Card>` existente.
+    * Ele deve receber `props` para um objeto de produto (`product`) e uma função `onClick`.
+    * **Layout Interno do Card:**
+        * No topo, uma imagem do produto.
+        * No `<CardHeader>`, o `<CardTitle>` com o nome do produto.
+        * No `<CardContent>`, o preço do produto, estilizado de forma proeminente (ex: `text-2xl font-bold text-primary`).
+    * **Interação de Hover:** Ao passar o mouse sobre o card, uma sobreposição com a descrição curta do produto deve aparecer sobre a imagem com uma animação de fade-in. Use as classes `group` e `group-hover` do TailwindCSS para isso.
+    * **Interação de Clique:** O `<Card>` inteiro deve ser clicável e, ao ser clicado, deve chamar a função `onClick` recebida via props, passando os dados do produto.
+
+### 4.2. Componente `ProductSaleModal`
+
+1.  **Crie o Arquivo:** Crie um novo arquivo em `apps/web/components/shop/ProductSaleModal.tsx`.
+2.  **Estrutura do Componente:**
+    * O componente será construído utilizando o `<Dialog>`, `<DialogContent>`, `<DialogHeader>`, `<DialogTitle>`, `<DialogDescription>` do `shadcn/ui`.
+    * Ele deve receber `props` para controlar sua visibilidade (`open`, `onOpenChange`) e para os dados do produto a ser exibido (`product`).
+    * **Layout Interno do Modal:**
+        * O `<DialogContent>` deve ser estilizado para ser grande (`sm:max-w-[60%]`).
+        * Dentro do modal, crie um layout de página de vendas: imagem ou vídeo de destaque, título (`<DialogTitle>`), descrição longa (`<DialogDescription>`), lista de benefícios, preço e, no final, um botão de CTA primário grande (`<Button size="lg">`) com o texto "Comprar Agora".
+
+## 5. Lógica e Dados na Página (`page.tsx`)
+
+1.  **Gerenciamento de Estado:** No componente `page.tsx`, use o hook `useState` para gerenciar dois estados:
+    * `const [selectedProduct, setSelectedProduct] = useState(null);`
+    * `const [isModalOpen, setIsModalOpen] = useState(false);`
+2.  **Mock Data:** Crie uma constante `mockProducts` que seja um array de objetos. Cada objeto deve ter todos os dados de um produto: `id`, `name`, `price`, `imageUrl`, `shortDescription`, `longDescription`, etc. Crie de 4 a 6 produtos de exemplo.
+3.  **Renderização e Lógica de Clique:**
+    * Na "Grade de Produtos", use `.map()` para iterar sobre `mockProducts` e renderizar um `<ProductCard>` para cada item.
+    * Passe uma função para o `onClick` do `ProductCard` que faça o seguinte: `(product) => { setSelectedProduct(product); setIsModalOpen(true); }`.
+    * No final do seu JSX, renderize o componente `<ProductSaleModal>`, passando os estados `isModalOpen` e `selectedProduct` como props.
+
+## 6. Resultado Esperado
+
+Uma página `/shop` funcional que exibe uma grade de produtos. Ao clicar em qualquer produto, um modal completo de página de vendas deve abrir, exibindo os detalhes daquele produto específico. O design deve ser 100% consistente com o restante do site.
