@@ -1,0 +1,53 @@
+# PROMPT TÉCNICO: REFATORAÇÃO DAS PÁGINAS LEARN E SHOP
+
+## 1. Objetivo Principal
+
+Sua tarefa é refatorar as páginas existentes `/learn` e `/shop` para implementar funcionalidades avançadas de navegação, busca e filtro. O objetivo é criar uma experiência de usuário consistente e poderosa em ambas as seções, utilizando um layout de **Sidebar + Conteúdo Principal**. Você DEVE reutilizar ao máximo os componentes e estilos do Design System existente.
+
+## 2. Passo 1: Criação do Layout Reutilizável `AppLayout`
+
+Antes de modificar as páginas, crie um novo componente de layout genérico que será usado em ambas.
+
+1.  **Crie o Arquivo:** Crie um novo arquivo em `apps/web/components/layout/AppLayout.tsx`.
+2.  **Estrutura do Componente:**
+    * Este componente deve renderizar um layout de duas colunas em telas grandes (`lg` e acima).
+    * **Coluna 1 (Sidebar):** Deve ser uma tag `<aside>` com uma largura fixa (ex: `w-72`) e borda à direita (`border-r`). Ela deve ser visível apenas em telas grandes (ex: `hidden lg:block`).
+    * **Coluna 2 (Conteúdo Principal):** Deve ser uma tag `<main>` que ocupa o restante do espaço (`flex-1`) e onde o conteúdo principal da página será renderizado.
+    * O componente `AppLayout` deve aceitar `children` como prop para renderizar o conteúdo principal.
+
+## 3. Passo 2: Refatoração da Página de Learn (`/learn`)
+
+Modifique o arquivo `apps/web/app/(main)/learn/page.tsx`.
+
+1.  **Converter para Client Component:** Adicione `"use client";` no topo do arquivo para podermos gerenciar o estado dos filtros e da busca.
+2.  **Aplicar o `AppLayout`:** Envolva o conteúdo principal da página com o novo componente `<AppLayout>`.
+3.  **Implementar a Sidebar:**
+    * Dentro do `<AppLayout>`, popule a área da sidebar.
+    * Adicione um título, como "Categorias".
+    * Crie uma estrutura de dados `mockCategories` com categorias e subcategorias (ex: `{ name: 'Automação', subcategories: ['n8n', 'Make'] }`).
+    * Renderize esta estrutura como uma lista de navegação. Para categorias com subcategorias, use o componente `<Collapsible>` do `shadcn/ui` para criar um efeito de acordeão.
+4.  **Implementar a Área de Conteúdo Principal:**
+    * No topo da área de conteúdo, adicione uma barra de ferramentas (`<div class="flex justify-between items-center mb-8">`).
+    * **Barra de Busca:** À esquerda da barra de ferramentas, adicione um `<Input>` do `shadcn/ui` com um ícone de "Search" da `lucide-react` posicionado dentro dele. Dê a ele um `placeholder="Buscar por palavra-chave..."`.
+    * **Filtros:** À direita, adicione um componente `<Select>` do `shadcn/ui` para filtros, com opções como "Mais Recentes" e "Mais Populares".
+    * **Grade de Conteúdo:** Mantenha a grade de `<ContentCard>` que já existe, logo abaixo desta nova barra de ferramentas.
+
+## 4. Passo 3: Refatoração da Página de Skills Shop (`/shop`)
+
+Aplique a mesma lógica ao arquivo `apps/web/app/(main)/shop/page.tsx`.
+
+1.  **Converter para Client Component:** Adicione `"use client";` no topo do arquivo.
+2.  **Aplicar o `AppLayout`:** Envolva o conteúdo principal da página com o componente `<AppLayout>`.
+3.  **Implementar a Sidebar:**
+    * Popule a área da sidebar com um título, como "Tópicos de Produtos".
+    * Crie uma estrutura de dados `mockProductTopics` com tópicos e subtópicos (ex: `{ name: 'E-books', subtopics: ['Engenharia de Prompt', 'Workflows de Automação'] }`).
+    * Renderize esta estrutura na sidebar usando o mesmo padrão de navegação com `<Collapsible>` da página Learn.
+4.  **Implementar a Área de Conteúdo Principal:**
+    * Adicione a mesma barra de ferramentas no topo da área de conteúdo.
+    * **Barra de Busca:** Adicione um `<Input>` para busca de produtos.
+    * **Filtros:** Adicione um `<Select>` para filtros como "Mais Vendidos" e "Novidades".
+    * **Grade de Produtos:** Mantenha a grade de `<ProductCard>` que já existe, abaixo da barra de ferramentas.
+
+## 5. Resultado Esperado
+
+Ao final, as páginas `/learn` e `/shop` devem compartilhar um layout consistente e profissional de duas colunas (em desktop), com uma sidebar de navegação à esquerda e uma área de conteúdo à direita. A área de conteúdo em ambas as páginas deve agora apresentar uma barra de busca e opções de filtro, prontas para terem sua lógica de estado implementada. O design deve herdar naturalmente o estilo "premium" dos componentes `shadcn/ui` já configurados no projeto.

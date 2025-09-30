@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from 'react';
+import { Search } from 'lucide-react';
+import AppLayout from '@/components/layout/AppLayout';
 import ProductCard, { type Product } from '@/components/shop/ProductCard';
 import ProductSaleModal from '@/components/shop/ProductSaleModal';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown } from 'lucide-react';
 
 const mockProducts: Product[] = [
   {
@@ -111,14 +117,119 @@ const mockProducts: Product[] = [
   }
 ];
 
+const mockProductTopics = [
+  {
+    name: 'E-books',
+    subtopics: ['Engenharia de Prompt', 'Workflows de Automação', 'Modelos Open Source', 'DevOps']
+  },
+  {
+    name: 'Cursos Online',
+    subtopics: ['Desenvolvimento Full-Stack', 'Automação com IA', 'Segurança', 'Cloud Computing']
+  },
+  {
+    name: 'Workshops',
+    subtopics: ['Deploy e DevOps', 'Arquitetura de Software', 'Performance', 'Testing']
+  },
+  {
+    name: 'Consultoria',
+    subtopics: ['Arquitetura', 'Code Review', 'Mentoria Individual', 'Planejamento Técnico']
+  },
+  {
+    name: 'Pacotes',
+    subtopics: ['Bootcamp Completo', 'Bundle Premium', 'Acesso Vitalício', 'Corporativo']
+  }
+];
+
 export default function ShopPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState<string>('Todos');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('bestseller');
 
   const handleProductClick = (product: Product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
+
+  const getProductTopic = (product: Product): string => {
+    const name = product.name.toLowerCase();
+    if (name.includes('e-book') || name.includes('engenharia de prompt')) return 'E-books';
+    if (name.includes('masterclass') || name.includes('kit') || name.includes('curso')) return 'Cursos Online';
+    if (name.includes('workshop')) return 'Workshops';
+    if (name.includes('consultoria')) return 'Consultoria';
+    if (name.includes('package') || name.includes('bootcamp')) return 'Pacotes';
+    return 'Cursos Online';
+  };
+
+  const extractPrice = (priceStr: string): number => {
+    return parseFloat(priceStr.replace('R$', '').replace('.', '').replace(',', '.').trim());
+  };
+
+  const filteredProducts = mockProducts
+    .filter(product => {
+      const matchesTopic = selectedTopic === 'Todos' || getProductTopic(product) === selectedTopic;
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesTopic && matchesSearch;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'bestseller') {
+        return a.id.localeCompare(b.id);
+      } else if (sortBy === 'newest') {
+        return b.id.localeCompare(a.id);
+      } else if (sortBy === 'price-low') {
+        return extractPrice(a.price) - extractPrice(b.price);
+      } else if (sortBy === 'price-high') {
+        return extractPrice(b.price) - extractPrice(a.price);
+      }
+      return 0;
+    });
+
+  const sidebar = (
+    <div>
+      <h2 className="text-xl font-bold text-white mb-6">Tópicos de Produtos</h2>
+      
+      <div className="space-y-2">
+        <button
+          onClick={() => setSelectedTopic('Todos')}
+          className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+            selectedTopic === 'Todos'
+              ? 'bg-[#EE4F27] text-white'
+              : 'text-gray-300 hover:bg-slate-800'
+          }`}
+        >
+          Todos os Produtos
+        </button>
+
+        {mockProductTopics.map((topic) => (
+          <Collapsible key={topic.name}>
+            <CollapsibleTrigger
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
+                selectedTopic === topic.name
+                  ? 'bg-[#EE4F27] text-white'
+                  : 'text-gray-300 hover:bg-slate-800'
+              }`}
+              onClick={() => setSelectedTopic(topic.name)}
+            >
+              <span>{topic.name}</span>
+              <ChevronDown className="w-4 h-4" />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-1 ml-4 space-y-1">
+              {topic.subtopics.map((sub) => (
+                <button
+                  key={sub}
+                  className="w-full text-left px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                >
+                  {sub}
+                </button>
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
@@ -143,26 +254,61 @@ export default function ShopPage() {
         </div>
       </header>
 
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-            Skills Shop
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            As ferramentas e o conhecimento que você precisa para escalar. Sem ruído, apenas resultados.
-          </p>
-        </div>
+      <AppLayout sidebar={sidebar}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="mb-12">
+            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Skills Shop
+            </h1>
+            <p className="text-xl text-gray-300">
+              As ferramentas e o conhecimento que você precisa para escalar. Sem ruído, apenas resultados.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {mockProducts.map((product) => (
-            <ProductCard 
-              key={product.id}
-              product={product}
-              onClick={handleProductClick}
-            />
-          ))}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Input
+                type="text"
+                placeholder="Buscar produtos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-slate-800 border-gray-700 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-[200px] bg-slate-800 border-gray-700 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-800 border-gray-700">
+                <SelectItem value="bestseller" className="text-white">Mais Vendidos</SelectItem>
+                <SelectItem value="newest" className="text-white">Novidades</SelectItem>
+                <SelectItem value="price-low" className="text-white">Menor Preço</SelectItem>
+                <SelectItem value="price-high" className="text-white">Maior Preço</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProducts.map((product) => (
+              <ProductCard 
+                key={product.id}
+                product={product}
+                onClick={handleProductClick}
+              />
+            ))}
+          </div>
+
+          {filteredProducts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-400 text-lg">
+                Nenhum produto encontrado com os filtros selecionados.
+              </p>
+            </div>
+          )}
         </div>
-      </section>
+      </AppLayout>
 
       <ProductSaleModal 
         open={isModalOpen}
