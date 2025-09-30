@@ -1,0 +1,58 @@
+# PROMPT TÉCNICO: CRIAÇÃO DA PÁGINA DE LEARN (/learn)
+
+## 1. Objetivo Principal
+
+Sua tarefa é criar a página principal do "Módulo Learn" no caminho `/learn`. Esta página servirá como uma vitrine para todos os conteúdos educacionais, organizada por categorias. É crucial que você reutilize os componentes e estilos existentes no projeto para manter a consistência visual com a landing page já criada.
+
+## 2. Estrutura de Arquivos e Roteamento
+
+1.  **Crie a Rota:** Dentro da estrutura do Next.js App Router em `apps/web/app/(main)/`, crie uma nova pasta chamada `learn`.
+2.  **Crie o Arquivo da Página:** Dentro da pasta `learn`, crie o arquivo principal da página: `page.tsx`.
+
+## 3. Estrutura da Página (`page.tsx`)
+
+O componente `page.tsx` deve ser um **Server Component** (padrão do App Router) e ter a seguinte estrutura vertical:
+
+1.  **Layout Global:** A página DEVE ser envolvida pelo layout principal, que já inclui o `Header` e o `Footer` existentes. Você não precisa recriá-los, apenas garantir que a nova página seja renderizada dentro deles.
+
+2.  **Seção de Cabeçalho da Página:**
+    * Abaixo do Header global, adicione uma seção com `padding` vertical (`py-12` ou `py-16`).
+    * Inclua um título principal (`<h1>`) com o texto "Módulo Learn" e um subtítulo (`<p>`) explicando que este é o centro de conhecimento da plataforma, com tutoriais e aulas práticas. Use os estilos de tipografia já definidos no projeto.
+
+3.  **Seção de Filtros de Categoria:**
+    * Crie uma seção que conterá os botões de filtro.
+    * Use um layout `flex` com `gap-2` ou `gap-4`.
+    * Renderize uma lista de botões reutilizando o componente `<Button>` existente com `variant="outline"`.
+    * **Para este desenvolvimento inicial, use uma lista de categorias fake (mock):** `['Engenharia de Prompt', 'Automação com IA', 'Modelos Open Source', 'Segurança em IA']`.
+
+4.  **Grade de Conteúdo:**
+    * Esta é a área principal da página.
+    * Crie uma grade responsiva usando TailwindCSS (ex: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8`).
+    * Nesta grade, você irá renderizar os cards de conteúdo.
+
+## 4. Criação do Componente Reutilizável: `ContentCard`
+
+Para exibir os conteúdos na grade, você precisa criar um novo componente.
+
+1.  **Crie o Arquivo:** Crie um novo arquivo em `apps/web/components/learn/ContentCard.tsx`.
+2.  **Estrutura do Componente:**
+    * O componente `ContentCard` deve ser construído utilizando o componente `<Card>` que já existe no nosso Design System (`shadcn/ui` estilizado).
+    * Ele deve receber `props` como `title`, `description`, `imageUrl`, `category` e `slug`.
+    * **Layout Interno do Card:**
+        * No topo, uma imagem. Use o componente `<AspectRatio ratio={16/9}>` para manter a proporção da imagem.
+        * No `<CardHeader>`, adicione um componente `<Badge>` (do `shadcn/ui`) para exibir a `category`. Abaixo, exiba o `<CardTitle>` com a `prop` `title`.
+        * No `<CardContent>`, exiba a `<CardDescription>` com a `prop` `description`.
+        * No `<CardFooter>`, adicione um link ou botão "Leia Mais".
+    * O componente `ContentCard` inteiro deve ser envolvido por um componente `<Link>` do Next.js, apontando para `/learn/{slug}`.
+
+## 5. Dados Falsos (Mock Data) para Desenvolvimento
+
+Para popular a página, você não precisa se conectar ao banco de dados ainda.
+
+1.  **Crie um Array de Mock:** Diretamente no arquivo `apps/web/app/(main)/learn/page.tsx`, crie uma constante `mockContents` que seja um array de objetos.
+2.  **Estrutura do Objeto:** Cada objeto deve ter a estrutura definida pelas props do `ContentCard`: `id`, `title`, `description`, `imageUrl`, `category`, e `slug`. Crie de 6 a 9 objetos neste array com dados de exemplo variados.
+3.  **Renderização:** Na seção "Grade de Conteúdo", use a função `.map()` para iterar sobre o array `mockContents` e renderizar um componente `<ContentCard />` para cada item, passando as props correspondentes.
+
+## 6. Resultado Esperado
+
+Ao final, a página `/learn` deve estar funcional, exibindo uma lista de cards de conteúdo com dados de exemplo. A página deve ser visualmente consistente com a landing page, pois reutiliza os mesmos componentes de base (`Header`, `Footer`, `Card`, `Button`, `Badge`).
