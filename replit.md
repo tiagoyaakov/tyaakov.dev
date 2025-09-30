@@ -29,9 +29,10 @@ This is a Next.js 13.5.1 application for Tyaakov.dev, a Portuguese-language plat
 │   └── globals.css         # Global styles and Tailwind config
 ├── components/
 │   ├── ui/                 # Shadcn/Radix UI components
+│   ├── layout/             # Layout components
+│   │   └── AppLayout.tsx       # Reusable sidebar + main content layout
 │   ├── learn/              # Learn module components
-│   │   ├── ContentCard.tsx     # Reusable content card
-│   │   └── FilterableGrid.tsx  # Client component for filtering
+│   │   └── ContentCard.tsx     # Reusable content card
 │   └── shop/               # Skills Shop components
 │       ├── ProductCard.tsx     # Product card with hover effects
 │       └── ProductSaleModal.tsx # Modal dialog for product details
@@ -58,23 +59,35 @@ This is a Next.js 13.5.1 application for Tyaakov.dev, a Portuguese-language plat
 - **Responsive Design**: Mobile-first approach
 
 #### Learn Module (/learn)
-- **Content Library**: Organized catalog of tutorials and courses
-- **Category Filtering**: Interactive filter buttons for content categories
+- **Sidebar Navigation**: Collapsible category menu with "Todos" option
   - Engenharia de Prompt
   - Automação com IA
   - Modelos Open Source
   - Segurança em IA
-- **Content Cards**: Reusable cards with category badges, titles, descriptions
-- **Server-Side Rendering**: Main page is SSR for optimal SEO
-- **Client-Side Filtering**: Fast filtering without page reloads
+- **Search Functionality**: Real-time search bar filtering content by title/description
+- **Sorting Options**: Dropdown with "Mais Recentes" and "Mais Populares" sorting
+- **Content Library**: Organized catalog of tutorials and courses
+- **Content Cards**: Reusable cards with images, category badges, titles, descriptions
+- **Combined Filtering**: Sidebar categories + search + sorting work together
+- **Server Component**: Main page uses SSR for optimal SEO
 - **Placeholder Detail Pages**: Dynamic routes ready for content expansion
 
 #### Skills Shop (/shop)
+- **Sidebar Navigation**: Collapsible topic menu with "Todos os Produtos" option
+  - E-books
+  - Cursos Online
+  - Workshops
+  - Consultoria
+  - Pacotes
+- **Topic-Based Filtering**: Products categorized by keywords and filtered by selected topic
+- **Search Functionality**: Real-time search bar filtering products by name/description
+- **Sorting Options**: Dropdown with "Mais Vendidos", "Novidades", "Menor Preço", "Maior Preço"
 - **Product Storefront**: Steam-inspired grid layout showcasing premium infoproducts
 - **Interactive Product Cards**: Hover effects reveal short descriptions
 - **Modal-Based Product Details**: Click any product to open a full sales page modal
 - **Product Information**: Complete details including long descriptions, benefits list, pricing
 - **Call-to-Action**: Purchase buttons with guarantee messaging
+- **Combined Filtering**: Sidebar topics + search + sorting work together
 - **Mock Product Data**: 6 example products covering courses, consultancy, and packages
 - **Responsive Grid**: 1-3 columns adapting to screen size
 
@@ -100,6 +113,16 @@ The application is configured for autoscale deployment:
 - **Deployment Type**: Autoscale (stateless)
 
 ## Recent Changes
+- 2025-09-30: Advanced Navigation Features implementation completed
+  - Created reusable AppLayout component with sidebar and main content structure
+  - Refactored /learn page with sidebar navigation, search bar, and sorting dropdown
+  - Refactored /shop page with sidebar navigation, search bar, and sorting dropdown
+  - Implemented working category/topic filtering on both pages
+  - Added functional sorting logic (recent/popular for Learn, bestseller/newest/price for Shop)
+  - All filters (sidebar, search, sorting) work together seamlessly
+  - Preserved existing modal functionality on shop page
+  - Passed architect review for functionality and code quality
+
 - 2025-09-30: Skills Shop Module implementation completed
   - Created `/shop` route with Client Component architecture for state management
   - Built ProductCard component with hover effects and click interactions
