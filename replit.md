@@ -24,12 +24,17 @@ This is a Next.js 13.5.1 application for Tyaakov.dev, a Portuguese-language plat
 │   │   ├── page.tsx        # Learn listing page (Server Component)
 │   │   └── [slug]/         # Dynamic content detail routes
 │   │       └── page.tsx    # Individual content pages
+│   ├── shop/               # Skills Shop pages
+│   │   └── page.tsx        # Product storefront (Client Component)
 │   └── globals.css         # Global styles and Tailwind config
 ├── components/
 │   ├── ui/                 # Shadcn/Radix UI components
-│   └── learn/              # Learn module components
-│       ├── ContentCard.tsx     # Reusable content card
-│       └── FilterableGrid.tsx  # Client component for filtering
+│   ├── learn/              # Learn module components
+│   │   ├── ContentCard.tsx     # Reusable content card
+│   │   └── FilterableGrid.tsx  # Client component for filtering
+│   └── shop/               # Skills Shop components
+│       ├── ProductCard.tsx     # Product card with hover effects
+│       └── ProductSaleModal.tsx # Modal dialog for product details
 ├── hooks/
 │   └── use-toast.ts        # Toast notification hook
 ├── lib/
@@ -64,6 +69,15 @@ This is a Next.js 13.5.1 application for Tyaakov.dev, a Portuguese-language plat
 - **Client-Side Filtering**: Fast filtering without page reloads
 - **Placeholder Detail Pages**: Dynamic routes ready for content expansion
 
+#### Skills Shop (/shop)
+- **Product Storefront**: Steam-inspired grid layout showcasing premium infoproducts
+- **Interactive Product Cards**: Hover effects reveal short descriptions
+- **Modal-Based Product Details**: Click any product to open a full sales page modal
+- **Product Information**: Complete details including long descriptions, benefits list, pricing
+- **Call-to-Action**: Purchase buttons with guarantee messaging
+- **Mock Product Data**: 6 example products covering courses, consultancy, and packages
+- **Responsive Grid**: 1-3 columns adapting to screen size
+
 ## Development Setup
 
 ### Running Locally
@@ -86,6 +100,15 @@ The application is configured for autoscale deployment:
 - **Deployment Type**: Autoscale (stateless)
 
 ## Recent Changes
+- 2025-09-30: Skills Shop Module implementation completed
+  - Created `/shop` route with Client Component architecture for state management
+  - Built ProductCard component with hover effects and click interactions
+  - Designed ProductSaleModal component for full product detail pages
+  - Implemented 6 mock products with complete information (courses, consultancy, packages)
+  - Modal opens on card click showing full sales page with benefits and CTA
+  - Responsive grid layout (1-3 columns) following design system
+  - Passed architect review for code quality and component structure
+
 - 2025-09-30: GitHub Import Setup completed
   - Installed all npm dependencies from package.json
   - Verified Next.js 13.5.1 configuration works with Replit proxy (using -H 0.0.0.0 flag)
