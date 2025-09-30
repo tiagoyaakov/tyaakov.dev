@@ -20,9 +20,16 @@ This is a Next.js 13.5.1 application for Tyaakov.dev, a Portuguese-language plat
 ├── app/
 │   ├── layout.tsx          # Root layout with metadata
 │   ├── page.tsx            # Main homepage component
+│   ├── learn/              # Learn module pages
+│   │   ├── page.tsx        # Learn listing page (Server Component)
+│   │   └── [slug]/         # Dynamic content detail routes
+│   │       └── page.tsx    # Individual content pages
 │   └── globals.css         # Global styles and Tailwind config
 ├── components/
-│   └── ui/                 # Shadcn/Radix UI components
+│   ├── ui/                 # Shadcn/Radix UI components
+│   └── learn/              # Learn module components
+│       ├── ContentCard.tsx     # Reusable content card
+│       └── FilterableGrid.tsx  # Client component for filtering
 ├── hooks/
 │   └── use-toast.ts        # Toast notification hook
 ├── lib/
@@ -33,6 +40,8 @@ This is a Next.js 13.5.1 application for Tyaakov.dev, a Portuguese-language plat
 ```
 
 ### Key Features
+
+#### Homepage (/)
 - **Hero Section**: Dynamic terminal animation showing developer journey
 - **Statistics Dashboard**: Interactive charts showing student growth and metrics
 - **Social Proof**: Testimonial cards with star ratings
@@ -42,6 +51,18 @@ This is a Next.js 13.5.1 application for Tyaakov.dev, a Portuguese-language plat
 - **Urgency/Scarcity**: Limited spots messaging
 - **Contact Form**: Frictionless lead capture
 - **Responsive Design**: Mobile-first approach
+
+#### Learn Module (/learn)
+- **Content Library**: Organized catalog of tutorials and courses
+- **Category Filtering**: Interactive filter buttons for content categories
+  - Engenharia de Prompt
+  - Automação com IA
+  - Modelos Open Source
+  - Segurança em IA
+- **Content Cards**: Reusable cards with category badges, titles, descriptions
+- **Server-Side Rendering**: Main page is SSR for optimal SEO
+- **Client-Side Filtering**: Fast filtering without page reloads
+- **Placeholder Detail Pages**: Dynamic routes ready for content expansion
 
 ## Development Setup
 
@@ -65,6 +86,15 @@ The application is configured for autoscale deployment:
 - **Deployment Type**: Autoscale (stateless)
 
 ## Recent Changes
+- 2025-09-30: Learn Module implementation completed
+  - Created `/learn` route with Server Component architecture
+  - Built FilterableGrid client component for category filtering
+  - Designed reusable ContentCard component following design system
+  - Added dynamic `[slug]` routes with placeholder detail pages
+  - Implemented 9 mock content items across 4 categories
+  - Fixed all accessibility issues (no nested interactive elements)
+  - Passed architect review for code quality and best practices
+
 - 2025-09-30: Initial Replit setup completed
   - Configured Next.js for Replit proxy compatibility
   - Added cache control headers
